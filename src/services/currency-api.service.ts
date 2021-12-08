@@ -1,11 +1,11 @@
 import {inject, Provider} from '@loopback/core';
 import {getService} from '@loopback/service-proxy';
 import {CurrenciesApiDataSource} from '../datasources';
-import {CurrencyHistory} from '../models';
+import {CurrencyHistoricFields} from '../models';
 
 export interface CurrencyApi {
 
-  lastQuotation(currencies: string): Promise<CurrencyHistory>
+  lastQuotation(currencies: string): Promise<Map<string, CurrencyHistoricFields>>
   // this is where you define the Node.js methods that will be
   // mapped to REST/SOAP/gRPC operations as stated in the datasource
   // json file.

@@ -51,6 +51,7 @@
   "dependencies": {
     "@loopback/boot": "~4.0.0",
     "@loopback/core": "~3.0.0",
+    "@loopback/cron": "~0.7.0",
     "@loopback/repository": "~4.0.0",
     "@loopback/rest": "~11.0.0",
     "@loopback/rest-crud": "~0.12.0",

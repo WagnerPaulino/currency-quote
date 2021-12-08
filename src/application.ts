@@ -1,5 +1,6 @@
 import {BootMixin} from '@loopback/boot';
-import {ApplicationConfig} from '@loopback/core';
+import {ApplicationConfig, createBindingFromClass} from '@loopback/core';
+import {CronComponent} from '@loopback/cron';
 import {RepositoryMixin, SchemaMigrationOptions} from '@loopback/repository';
 import {RestApplication} from '@loopback/rest';
 import {CrudRestComponent} from '@loopback/rest-crud';
@@ -10,6 +11,7 @@ import {
 import {ServiceMixin} from '@loopback/service-proxy';
 import path from 'path';
 import {INITIAL_DATA} from './initialData';
+import {CurrencyHistoryJob} from './jobs/currency-history.job';
 import {CurrencyRepository} from './repositories';
 import {MySequence} from './sequence';
 
@@ -44,6 +46,8 @@ export class CurrencyQuoteApiApplication extends BootMixin(
       },
     };
     this.component(CrudRestComponent);
+    this.component(CronComponent);
+    this.add(createBindingFromClass(CurrencyHistoryJob));
   }
 
   async migrateSchema(options?: SchemaMigrationOptions) {

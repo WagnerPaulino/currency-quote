@@ -1,65 +1,18 @@
-import {Entity, model, property} from '@loopback/repository';
+import {Entity, hasMany, model, property} from '@loopback/repository';
+import {CurrencyHistoricFields} from './currency-historic-fields.model';
 
-@model({settings: {strict: false}})
+@model({
+  settings: {},
+})
 export class CurrencyHistory extends Entity {
   @property({
     type: 'string',
     id: true,
-    generated: false,
-    required: true,
   })
   code: string;
 
-  @property({
-    type: 'string',
-  })
-  codein?: string;
-
-  @property({
-    type: 'string',
-  })
-  name?: string;
-
-  @property({
-    type: 'string',
-  })
-  high?: string;
-
-  @property({
-    type: 'string',
-  })
-  low?: string;
-
-  @property({
-    type: 'string',
-  })
-  varBid?: string;
-
-  @property({
-    type: 'string',
-  })
-  pctChange?: string;
-
-  @property({
-    type: 'string',
-  })
-  bid?: string;
-
-  @property({
-    type: 'string',
-  })
-  ask?: string;
-
-  @property({
-    type: 'string',
-  })
-  timestamp?: string;
-
-  @property({
-    type: 'date',
-  })
-  create_date?: string;
-
+  @hasMany(() => CurrencyHistoricFields)
+  history: CurrencyHistoricFields[];
   // Define well-known properties here
 
   // Indexer property to allow additional data
