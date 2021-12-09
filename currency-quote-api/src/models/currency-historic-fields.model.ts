@@ -1,6 +1,6 @@
-import {Entity, model, property} from '@loopback/repository';
+import { Entity, model, property } from '@loopback/repository';
 
-@model({settings: {}})
+@model({ settings: {} })
 export class CurrencyHistoricFields extends Entity {
 
   @property({
@@ -60,9 +60,9 @@ export class CurrencyHistoricFields extends Entity {
   timestamp?: string;
 
   @property({
-    type: 'string',
+    type: Date,
   })
-  create_date?: string;
+  create_date?: Date;
 
   @property({
     type: 'string',
