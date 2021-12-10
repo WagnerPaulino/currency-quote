@@ -1,6 +1,6 @@
 import { CurrencyHistory } from "../models/CurrencyHistory";
 
-export declare type CurrencyHistoryAction = 'One' | 'Multiple'
+export declare type CurrencyHistoryAction = 'CurrencyHistoryActionOne' | 'CurrencyHistoryActionMultiple'
 
 export interface CurrencyHistoryState {
     type: CurrencyHistoryAction
@@ -9,18 +9,18 @@ export interface CurrencyHistoryState {
 }
 
 const loadOneInitialState: CurrencyHistoryState = {
-    type: 'One',
+    type: 'CurrencyHistoryActionOne',
     currencyHistory: new CurrencyHistory(),
     currencyHistories: []
 }
 
-export function currencyHistoryReducer(_state = loadOneInitialState, action: CurrencyHistoryState): CurrencyHistoryState {
+export function currencyHistoryReducer(_state: CurrencyHistoryState, action: CurrencyHistoryState): CurrencyHistoryState {
     switch (action.type) {
-        case 'One':
+        case 'CurrencyHistoryActionOne':
             return action ?? loadOneInitialState;
-        case 'Multiple':
+        case 'CurrencyHistoryActionMultiple':
             return action;
         default:
-            return loadOneInitialState;
+            return _state ?? loadOneInitialState;
     }
 }

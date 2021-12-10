@@ -3,15 +3,12 @@ import { Button, CardActions, Grid } from "@mui/material";
 import React, { useMemo, useState } from 'react';
 import { Currency } from "../models/Currency";
 import { CurrencyHistory } from "../models/CurrencyHistory";
+import { currencyFormat } from "../utils/Utils";
 import { CardCustom } from "./CardCustom";
 import { CurrencyHistoryDialog } from "./CurrencyHistoryDialog";
 
 interface GridProps {
     currenciesHistory: CurrencyHistory[];
-}
-
-function currencyFormat(num: string) {
-    return 'R$' + parseFloat(num).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
 }
 
 export function GridCardCurrencyHistory({ currenciesHistory }: GridProps) {
@@ -49,14 +46,14 @@ export function GridCardCurrencyHistory({ currenciesHistory }: GridProps) {
                             <CardCustom buttonActions={() => (
                                 <CardActions>
                                     <Button><FavoriteBorder>FavoriteBorder</FavoriteBorder></Button>
-                                    <Button onClick={onOpenDialog(hist.code ?? '')}>Open history</Button>
+                                    <Button onClick={onOpenDialog(hist.code ?? '')}>Open chart history</Button>
                                 </CardActions>
                             )} title={hist.code ?? ''} subtitle={hist.name ?? ''}><span>{currencyFormat(hist.ask ?? "0")}</span></CardCustom>
                         </Grid>
                     ))
                 }
             </Grid>
-            <CurrencyHistoryDialog open={openDialog} onClose={onDialogClose} currencyCode={currencyCode} />
+            {openDialog ? <CurrencyHistoryDialog open={openDialog} onClose={onDialogClose} currencyCode={currencyCode} /> : <></>}
         </>
     )
 }

@@ -22,7 +22,7 @@ export function findCurrencies(): (store: Store<CurrencyState>) => void {
         getAxios().get<Currency[]>('/currencies', {
             params: { filter: getDefaultFilter(defaultWhere) }
         }).then(currencies => store.dispatch<CurrencyState>({
-            type: 'Multiple',
+            type: 'CurrencyActionMultiple',
             currencies: currencies.data,
             currency: {}
         }))

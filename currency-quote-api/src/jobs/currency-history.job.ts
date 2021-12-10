@@ -1,10 +1,10 @@
-import {inject} from '@loopback/context';
-import {CronJob, cronJob} from '@loopback/cron';
-import {repository} from '@loopback/repository';
-import {INITIAL_DATA} from '../initialData';
-import {CurrencyHistoricFields, CurrencyHistory} from '../models';
-import {CurrencyHistoryRepository} from '../repositories';
-import {CurrencyApi} from '../services';
+import { inject } from '@loopback/context';
+import { CronJob, cronJob } from '@loopback/cron';
+import { repository } from '@loopback/repository';
+import { INITIAL_DATA } from '../initialData';
+import { CurrencyHistoricFields, CurrencyHistory } from '../models';
+import { CurrencyHistoryRepository } from '../repositories';
+import { CurrencyApi } from '../services';
 
 @cronJob()
 export class CurrencyHistoryJob extends CronJob {
@@ -19,12 +19,26 @@ export class CurrencyHistoryJob extends CronJob {
         for (const [code, currency] of Object.entries(currencyMapResponse)) {
           const exist = await currencyHistoryRepository.exists(code);
           if (!exist) {
-            await currencyHistoryRepository.create(new CurrencyHistory({code}))
+            await currencyHistoryRepository.create(new CurrencyHistory({ code }))
           }
-          await currencyHistoryRepository.history(code).create(new CurrencyHistoricFields(currency));
+          const currentHistory = await currencyHistoryRepository.history(code).find(
+            {
+              where: {
+                and: [
+                  { ask: currency.ask },
+                  { high: currency.high },
+                  { low: currency.low },
+                  { low: currency.low },
+                  { create_date: currency.create_date },
+                ]
+              }
+            })
+          if (currentHistory.length === 0) {
+            await currencyHistoryRepository.history(code).create(new CurrencyHistoricFields(currency));
+          }
         }
       },
-      cronTime: '*/60 * * * * *',
+      cronTime: '*/30 * * * * *',
       start: true,
 
     });

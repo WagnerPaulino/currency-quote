@@ -29,7 +29,7 @@ export function findCurrenciesHistory(): (store: Store<CurrencyHistoryState>) =>
         getAxios().get<CurrencyHistory[]>('/currency-histories', {
             params: { filter: defaultWhere }
         }).then(currencies => store.dispatch<CurrencyHistoryState>({
-            type: 'Multiple',
+            type: 'CurrencyHistoryActionMultiple',
             currencyHistories: currencies.data,
             currencyHistory: {}
         }))
