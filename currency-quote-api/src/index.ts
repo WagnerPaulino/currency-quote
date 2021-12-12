@@ -1,4 +1,10 @@
-import {ApplicationConfig, CurrencyQuoteApiApplication} from './application';
+import { AuthenticationBindings, AuthenticationComponent } from '@loopback/authentication';
+import { addExtension } from '@loopback/core';
+import { ApplicationConfig, CurrencyQuoteApiApplication } from './application';
+import { AuthSequence } from './auth/auth-sequence';
+import { PassportBasicAuthProvider } from './auth/passport-basic-auth-provider';
+import { VerifyFunctionProvider } from './auth/verify-function-provider';
+import { UserRepository } from './repositories';
 
 export * from './application';
 
@@ -6,6 +12,28 @@ export async function main(options: ApplicationConfig = {}) {
   const app = new CurrencyQuoteApiApplication(options);
   await app.boot();
   await app.start();
+
+  app.component(AuthenticationComponent);
+
+  // bind the user repo
+  app.bind('repositories.users').toClass(UserRepository);
+
+  // bind the authenticated sequence (mentioned later in this document)
+  app.sequence(AuthSequence);
+
+  // the verify function for passport-http
+  app.bind('authentication.basic.verify').toProvider(VerifyFunctionProvider);
+
+  // register PassportBasicAuthProvider as a custom authentication strategy
+  addExtension(
+    app,
+    AuthenticationBindings.AUTHENTICATION_STRATEGY_EXTENSION_POINT_NAME,
+    PassportBasicAuthProvider,
+    {
+      namespace:
+        AuthenticationBindings.AUTHENTICATION_STRATEGY_EXTENSION_POINT_NAME,
+    },
+  );
 
   const url = app.restServer.url;
   console.log(`Server is running at ${url}`);
